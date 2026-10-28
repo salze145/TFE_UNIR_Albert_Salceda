@@ -30,18 +30,17 @@ public class patrullaje : MonoBehaviour
 
     private void Update()
     {
-        RB2D.linearVelocity = new Vector2(velocidad, RB2D.linearVelocity.y);
-        if (Time.time >= tiempoProximoGiro && !isGrounded())
+        RB2D.linearVelocity = new Vector2(transform.right.x *  velocidad, RB2D.linearVelocity.y);
+        if (!isGrounded())
         {
             Flip();
-            velocidad *= -1;
+            
         }
-
-        if (Time.time >= tiempoProximoGiro && isFront())
+        else if (Time.time >= tiempoProximoGiro && isFront())
         //if (isFront())
         {
             Flip();
-            velocidad *= -1;
+            //velocidad *= -1;
         }
 
 
@@ -49,6 +48,8 @@ public class patrullaje : MonoBehaviour
 
     private void Flip()
     {
+        //mirandoDerecha = !mirandoDerecha; 
+       
         transform.Rotate(0, 180, 0);
         tiempoProximoGiro = Time.time + cdGiro;
     }
@@ -65,14 +66,18 @@ public class patrullaje : MonoBehaviour
     private bool isFront()
     {
 
-        if (ray == null) return false;
+        if (ray2 == null) return false;
         // Determinamos el vector de dirección según hacia dónde esté mirando el enemigo
         Vector2 direccionPared = mirandoDerecha ? Vector2.right : Vector2.left;
         // Lanzamos el raycast horizontal desde 'ray' (o desde transform.position) hacia adelante
+        //RaycastHit2D hit = Physics2D.Raycast(ray2.position, direccionPared, frontDistance, suelo);
+        // transform.right apunta siempre hacia el frente real del rinoceronte, 
+        // sin importar hacia dónde haya girado.
         RaycastHit2D hit = Physics2D.Raycast(ray2.position, direccionPared, frontDistance, suelo);
 
-    
-        
+        //return hit.collider != null;
+
+
         return hit.collider != null;
     }
 
@@ -84,6 +89,7 @@ public class patrullaje : MonoBehaviour
         Gizmos.DrawLine(ray.position, new Vector2(ray.position.x, ray.position.y - groundDistance));
         Gizmos.color = Color.blue;
         Vector2 direccionPared = mirandoDerecha ? Vector2.right : Vector2.left;
+       // Vector2 direccionPared = Vector2.right;
         Gizmos.DrawLine(ray2.position, (Vector2)ray2.position + (direccionPared * frontDistance));
     }
 
