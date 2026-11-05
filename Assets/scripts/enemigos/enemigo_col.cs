@@ -59,6 +59,7 @@ public class enemigo_col : MonoBehaviour
 
             // 'collision.otherCollider' identifica exactamente cuál de los colliders
             // del enemigo hizo contacto con el jugador.
+
             // Verificamos que la colisión ocurrió con el cuerpo (objeto hijo).
             if (collision.otherCollider.transform != transform)
             {

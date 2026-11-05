@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void MuerteJugador()
+    public void MuerteJugador()
     {
 
         //estaMuerto = true;
