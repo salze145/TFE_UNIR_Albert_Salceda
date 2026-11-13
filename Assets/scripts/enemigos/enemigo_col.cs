@@ -73,7 +73,7 @@ public class enemigo_col : MonoBehaviour
     // CONTROLA LA MUERTE DEL ENEMIGO
     public void Muerte()
     {
-        
+        /*
         //controlPuntos.ActualizarPuntuacion(cantidadPuntos);
         GameManager.Instance.SumarPuntos(cantidadPuntos);
         //StartCoroutine(EfectoFlashBlanco());
@@ -89,7 +89,38 @@ public class enemigo_col : MonoBehaviour
 
         Destroy(gameObject, 0.5f);
         Debug.Log("enemigo muerto");
+        */
+
+        // Sumamos los puntos a través del GameManager
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SumarPuntos(cantidadPuntos);
+        }
+
+        // Solución 100% segura: En lugar de cambiar restricciones (que falla si es Kinematic),
+        // desactivamos la simulación de físicas para que se quede flotando o caiga por gravedad estática
+        if (RB2D != null)
+        {
+            RB2D.simulated = false; // Detiene cualquier cálculo de físicas de golpe sin dar error
+        }
+
+        // Desactivamos todos los colliders del enemigo para que el jugador lo atraviese
+        Collider2D[] todosLosColliders = GetComponentsInChildren<Collider2D>();
+        foreach (Collider2D c in todosLosColliders)
+        {
+            c.enabled = false;
+        }
+        Debug.Log("enemigo sin col");
+
+        // Destruimos el objeto tras 0.5 segundos
+        Destroy(gameObject, 0.5f);
+        Debug.Log("enemigo muerto");
     }
+
+
+
+
+
 
     public void HitPlayer(Transform playerTransform)
     {

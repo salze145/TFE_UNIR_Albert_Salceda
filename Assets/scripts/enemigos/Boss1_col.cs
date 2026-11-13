@@ -73,9 +73,11 @@ public class Boss1_col : MonoBehaviour
 
     }
 
-    //el boss 1 tiene 3 vidas, hay que darle 3 toques
+    //el boss 1 tiene 5 vidas, hay que darle 5 toques
     public void Muerte()
     {
+        
+        /*
         vidaBoss -= 1;
         StartCoroutine(EfectoFlashBlanco());
         if (vidaBoss <= 0)
@@ -93,7 +95,42 @@ public class Boss1_col : MonoBehaviour
             GameManager.Instance.SumarPuntos(cantidadPuntos);
             
         }
-       
+       */
+
+       vidaBoss -= 1;
+       Debug.Log("boss pierde una vida: " + vidaBoss);
+    StartCoroutine(EfectoFlashBlanco());
+
+    if (vidaBoss <= 0)
+    {
+        Victoria();
+        Debug.Log("Vida del boss agotada: " + vidaBoss);
+
+        // Sumamos los puntos de forma segura protegiendo el GameManager
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SumarPuntos(cantidadPuntos);
+        }
+
+        // Solución segura: Desactivamos la simulación de físicas sin tocar restricciones conflictivas
+        Rigidbody2D rbBoss = GetComponent<Rigidbody2D>();
+        if (rbBoss != null)
+        {
+            rbBoss.simulated = false;
+        }
+
+        // Desactivamos todos los colliders para que el jugador lo atraviese
+        Collider2D[] todosLosColliders = GetComponentsInChildren<Collider2D>();
+        foreach (Collider2D c in todosLosColliders)
+        {
+            c.enabled = false;
+        }
+        Debug.Log("Boss sin colisiones");
+
+        // Destruimos el GameObject del boss tras 1 segundo
+        Destroy(gameObject, 1f);
+        Debug.Log("Boss destruido");
+    }
         
     }
 
